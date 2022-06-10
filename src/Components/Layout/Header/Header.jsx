@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-
-import mealsImage from "../../../assets/meals.jpg";
+import mealsImage from "../../../assets/meal2.jpg";
 import CartContext from "../../../Store/CartContext";
 import CartIcon from "../../Cart/CartIcon";
 import styles from "./style.module.css";
@@ -45,7 +44,7 @@ const Header = (props) => {
   return (
     <>
       <header className={styles.header}>
-        <h1>React Meals</h1>
+        <h1>Food Manga</h1>
         <HeaderCartButton cartIsShown={props.setCartIsShown} />
       </header>
       <div className={styles["main-image"]}>
