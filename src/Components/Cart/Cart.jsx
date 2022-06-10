@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import CartContext from "../../Store/CartContext";
 import Modal from "../UI/Modal/Modal";
+import Checkout from "./Checkout";
 import styles from "./style.module.css";
 
 const CartItem = (props) => {
@@ -24,6 +25,7 @@ const CartItem = (props) => {
 };
 
 const Cart = (props) => {
+  const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -51,6 +53,21 @@ const Cart = (props) => {
     </ul>
   );
 
+  const orderHandler = () => {
+    setIsCheckout(true);
+  };
+
+  const submitOrderHandler = async (userData) => {
+    await fetch("https://meals-6f865-default-rtdb.firebaseio.com/orders.json", {
+      method: "POST",
+      body: JSON.stringify({
+        user: userData,
+        orderedItems: cartCtx.items,
+      }),
+    });
+    cartCtx.clearCart();
+  };
+
   return (
     <Modal>
       {cartItems}
@@ -58,15 +75,28 @@ const Cart = (props) => {
         <span>Total Amount: </span>
         <span>{totalAmount}</span>
       </div>
-      <div className={styles.actions}>
-        <button
-          className={styles["button--alt"]}
+      {isCheckout && (
+        <Checkout
+          onCancel={props.setCartIsHidden}
+          onConfirm={submitOrderHandler}
           onClick={props.setCartIsHidden}
-        >
-          Close
-        </button>
-        {hasItems && <button className={styles.button}>Order</button>}
-      </div>
+        />
+      )}
+      {!isCheckout && (
+        <div className={styles.actions}>
+          <button
+            className={styles["button--alt"]}
+            onClick={props.setCartIsHidden}
+          >
+            Close
+          </button>
+          {hasItems && (
+            <button className={styles.button} onClick={orderHandler}>
+              Order
+            </button>
+          )}
+        </div>
+      )}
     </Modal>
   );
 };
