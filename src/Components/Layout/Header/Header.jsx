@@ -27,7 +27,7 @@ const HeaderCartButton = (props) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [items]);
+  }, [cartCtx.items.length, items]);
 
   return (
     <button className={btnClasses} onClick={props.cartIsShown}>
@@ -48,7 +48,7 @@ const Header = (props) => {
         <HeaderCartButton cartIsShown={props.setCartIsShown} />
       </header>
       <div className={styles["main-image"]}>
-        <img src={mealsImage} alt="meal-image" />
+        <img src={mealsImage} alt="meal" />
       </div>
     </>
   );
